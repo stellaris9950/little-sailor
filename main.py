@@ -1,11 +1,11 @@
 
-# Import External Librarys
-import pygame
-import jsonProcess
-# import ui
+# # Import External Librarys
+# import pygame
+# import jsonProcess
+# # import ui
 
 
-
+"""
 
 jsonProcess.add_ui("start_button", "StartUI", (0,0), (10, 10))
 
@@ -34,33 +34,13 @@ def drawSpecificUI(containerWindowType):
 pygame.init()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Little Sailor")
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
-def show_front_page():
-    screen.fill((255, 255, 255))  # White background
-    title_font = pygame.font.Font(None, 72)
-    button_font = pygame.font.Font(None, 36)
-
-    # Draw the title
-    title_text = title_font.render('Cookie Clicker', True, (0, 0, 0))
-    title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 3))
-    screen.blit(title_text, title_rect)
-
-    # Draw the 'Start Game' button
-    button_text = button_font.render('Start Game', True, (0, 0, 0))
-    button_rect = button_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    pygame.draw.rect(screen, (200, 200, 200), button_rect.inflate(20, 20))  # Button background
-    screen.blit(button_text, button_rect)
-
-    return button_rect  # Return the rect to check for mouse click
-
-def is_button_clicked(button_rect):
-    return button_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]
 
 
-"""
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -87,33 +67,169 @@ while running:
 
 pygame.quit()
 """
+
+import pygame
+import json
+
+import ui
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the display
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Little Sailor")
+
+# Load cookie image
 cookie_img = pygame.image.load('cookie.png')
 cookie_rect = cookie_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 
+# Game variables
 score = 0
 font = pygame.font.Font(None, 36)
 
+# Save and load functions
+def save_game(score):
+    with open('savegame.json', 'w') as file:
+        json.dump({'score': score}, file)
+
+def load_game():
+    try:
+        with open('savegame.json', 'r') as file:
+            data = json.load(file)
+            return data['score']
+    except FileNotFoundError:
+        return 0
+
+# Front page functions
+
+# Main game loop
+game_state = 'front_page'  # Initial game state
+start_button_rects = (None, None)
+save_button_rect = pygame.Rect(WIDTH - 150, 10, 140, 40)
+
 running = True
 while running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if cookie_rect.collidepoint(event.pos):
-                score += 1
+            if game_state == 'front_page':
+                start_button_rect, load_button_rect = start_button_rects
+                if ui.buttonClickDetect(start_button_rect):
+                    game_state = 'main_game'
+                elif ui.buttonClickDetect(load_button_rect):
+                    score = load_game()
 
-    # Fill the screen with a background color
-    screen.fill((255, 255, 255))
+            elif game_state == 'main_game':
+                if cookie_rect.collidepoint(event.pos):
+                    score += 1
+                elif save_button_rect.collidepoint(event.pos):
+                    save_game(score)
 
-    # Draw the cookie
-    screen.blit(cookie_img, cookie_rect)
 
-    # Display the score
-    score_text = font.render(f"Score: {score}", True, (0, 0, 0))
-    screen.blit(score_text, (10, 10))
+    # __________________________________________________________________
+
+    if game_state == 'front_page':
+        start_button_rects = ui.show_front_page(screen)
+    elif game_state == 'main_game':
+
+
+        ui.drawPort(screen)
+
+
+
+    pygame.display.flip()
+
+pygame.quit()
+
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Constants for screen width and height
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# Set up the display
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('Game Interface with Button UI')
+
+# Define some colors
+WHITE = (255, 255, 255)
+LIGHT_BLUE = (173, 216, 230)
+DARK_BLUE = (0, 0, 139)
+BROWN = (165, 42, 42)
+GOLD = (255, 215, 0)
+GREY = (192, 192, 192)
+
+# Button positions and sizes
+buttons = {
+    "port": pygame.Rect(50, 500, 80, 80),
+    "market": pygame.Rect(150, 500, 80, 80),
+    "ship": pygame.Rect(250, 500, 80, 80),
+    "save_game": pygame.Rect(350, 500, 80, 80)
+}
+
+# Current page
+current_page = None
+
+
+def draw_interface(screen, page):
+    # Fill the background
+    screen.fill(LIGHT_BLUE)
+
+    # Draw the top bar
+    pygame.draw.rect(screen, DARK_BLUE, (0, 0, SCREEN_WIDTH, 50))
+
+    # Draw the main area depending on the page
+    if page:
+        message = page.upper()
+        font = pygame.font.Font(None, 36)
+        text = font.render(message, True, WHITE)
+        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
+        screen.blit(text, text_rect)
+    else:
+        pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
+
+    # Draw the buttons
+    for name, rect in buttons.items():
+        pygame.draw.rect(screen, BROWN, rect)
+        # Optionally add text to the buttons here
+
+
+def check_button_click(pos):
+    global current_page
+    for name, rect in buttons.items():
+        if rect.collidepoint(pos):
+            current_page = name
+            return
+
+
+# Main loop
+running = True
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if a button was clicked
+            if event.button == 1:  # Left mouse button
+                check_button_click(event.pos)
+
+    # Draw the interface
+    draw_interface(screen, current_page)
 
     # Update the display
     pygame.display.flip()
 
+# Quit Pygame
 pygame.quit()
 sys.exit()
