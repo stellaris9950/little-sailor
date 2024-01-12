@@ -32,22 +32,90 @@ def show_front_page(screen):
     return start_button_rect, load_button_rect
 
 
-def drawPort(screen):
-    # Fill the background
-    screen.fill(LIGHT_BLUE)
 
-    # Draw the top bar
+port_page = None
+buttons = {
+    "dock": pygame.Rect(50, 500, 80, 80),
+    "market": pygame.Rect(150, 500, 80, 80),
+    "ship": pygame.Rect(250, 500, 80, 80),
+    "save_game": pygame.Rect(350, 500, 80, 80)
+}
+def port_ui(screen):
+    screen.fill(LIGHT_BLUE)
     pygame.draw.rect(screen, DARK_BLUE, (0, 0, WIDTH, 50))
 
-    # Draw the main area
-    pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
+    if not port_page:
+        pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
+        for name, rect in buttons.items():
+            pygame.draw.rect(screen, BROWN, rect)
 
-    # Draw the bottom icons
-    icon_positions = [(50, 500), (150, 500), (250, 500), (350, 500), (450, 500)]
-    for pos in icon_positions:
-        pygame.draw.circle(screen, BROWN, pos, 40)
+# Return button position and size
+return_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
+# Function to draw a return button
 
-    # You can add text by creating a font object and rendering it to create a surface, like this:
-    # font = pygame.font.Font(None, 36)
-    # text = font.render('Some Text', True, WHITE)
-    # screen.blit(text, (text_position_x, text_position_y))
+def draw_return_button(screen):
+    pygame.draw.rect(screen, GREY, return_button)
+    font = pygame.font.Font(None, 36)
+    text_return = font.render('Return', True, WHITE)
+    text_rect = text_return.get_rect(center=return_button.center)
+    screen.blit(text_return, text_rect)
+
+
+# Dock UI sail button
+sail_button = pygame.Rect(350, 250, 100, 50)
+# Function to draw the dock UI
+
+def dock_ui(screen):
+    screen.fill(LIGHT_BLUE)
+    pygame.draw.rect(screen, RED, sail_button)  # Sail button
+
+    font = pygame.font.Font(None, 36)
+    text = font.render('Sail', True, WHITE)
+    text_rect = text.get_rect(center=sail_button.center)
+    screen.blit(text, text_rect)
+
+    draw_return_button(screen)
+
+
+# Market UI buttons
+buy_button = pygame.Rect(300, 200, 100, 50)
+sell_button = pygame.Rect(300, 300, 100, 50)
+# Function to handle drawing and interaction for the market UI
+def market_ui(screen):
+    screen.fill(LIGHT_BLUE)
+    pygame.draw.rect(screen, GREY, buy_button)
+    pygame.draw.rect(screen, GREY, sell_button)
+    # Draw text on the buttons
+    font = pygame.font.Font(None, 36)
+    text_buy = font.render('Buy', True, WHITE)
+    text_sell = font.render('Sell', True, WHITE)
+    screen.blit(text_buy, buy_button.topleft)
+    screen.blit(text_sell, sell_button.topleft)
+
+    draw_return_button(screen)
+
+# Ship UI button
+upgrade_button = pygame.Rect(300, 250, 150, 50)
+# Function to handle drawing and interaction for the ship UI
+def ship_ui(screen):
+    screen.fill(LIGHT_BLUE)
+    pygame.draw.rect(screen, GREY, upgrade_button)
+    # Draw text on the button
+    font = pygame.font.Font(None, 36)
+    text_upgrade = font.render('Upgrade Ship', True, WHITE)
+    screen.blit(text_upgrade, upgrade_button.topleft)
+
+    draw_return_button(screen)
+
+# Save game UI button
+save_button = pygame.Rect(300, 250, 150, 50)
+# Function to handle drawing and interaction for the save game UI
+def save_game_ui(screen):
+    screen.fill(LIGHT_BLUE)
+    pygame.draw.rect(screen, GREY, save_button)
+    # Draw text on the button
+    font = pygame.font.Font(None, 36)
+    text_save = font.render('Save Game', True, WHITE)
+    screen.blit(text_save, save_button.topleft)
+
+    draw_return_button(screen)

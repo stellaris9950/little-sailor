@@ -1,73 +1,3 @@
-
-# # Import External Librarys
-# import pygame
-# import jsonProcess
-# # import ui
-
-
-"""
-
-jsonProcess.add_ui("start_button", "StartUI", (0,0), (10, 10))
-
-
-def mouseDetect(obstacle_list, circle_list):
-    mouse_pos = pygame.mouse.get_pos()
-
-    for obstacle in obstacles_list:
-        if obstacle.rect.collidepoint(mouse_pos):
-            return obstacle
-
-    for circle in circle_list:
-        if circle.pos.distance_to(mouse_pos) < circle.radius:
-            return circle
-
-
-ui_list = jsonProcess.read_ui()
-def drawSpecificUI(containerWindowType):
-    for ui in ui_list:
-        if ui["containerWindowType"] == containerWindowType:
-
-            pygame.draw.rect(screen, "white", [ui["position"], ui["size"]])
-
-
-# pygame Run
-pygame.init()
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Little Sailor")
-clock = pygame.time.Clock()
-running = True
-dt = 0
-
-
-
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-
-
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("black")
-
-    drawSpecificUI('StartUI')
-
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-
-    # limits FPS to 60
-
-
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
-
-pygame.quit()
-"""
-
 import pygame
 import json
 
@@ -103,8 +33,6 @@ buttons = {
     "save_game": pygame.Rect(350, 500, 80, 80)
 }
 
-# Return button position and size
-return_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
 
 # Dock UI sail button
 sail_button = pygame.Rect(350, 250, 100, 50)
@@ -112,12 +40,10 @@ sail_button = pygame.Rect(350, 250, 100, 50)
 buy_button = pygame.Rect(300, 200, 100, 50)
 sell_button = pygame.Rect(300, 300, 100, 50)
 
-# Ship UI button
+
+return_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
 upgrade_button = pygame.Rect(300, 250, 150, 50)
-
-# Save game UI button
 save_button = pygame.Rect(300, 250, 150, 50)
-
 
 # Current page
 port_page = None
@@ -142,69 +68,11 @@ def load_game():
 
 # Port page functions -----------------------------------------
 
-def port_ui(screen):
-    screen.fill(LIGHT_BLUE)
-    pygame.draw.rect(screen, DARK_BLUE, (0, 0, WIDTH, 50))
 
-    if not port_page:
-        pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
-        for name, rect in buttons.items():
-            pygame.draw.rect(screen, BROWN, rect)
 
-# Function to draw a return button
-def draw_return_button(screen):
-    pygame.draw.rect(screen, GREY, return_button)
-    font = pygame.font.Font(None, 36)
-    text_return = font.render('Return', True, WHITE)
-    text_rect = text_return.get_rect(center=return_button.center)
-    screen.blit(text_return, text_rect)
-# Function to draw the dock UI
-def dock_ui(screen):
-    screen.fill(LIGHT_BLUE)
-    pygame.draw.rect(screen, RED, sail_button)  # Sail button
 
-    font = pygame.font.Font(None, 36)
-    text = font.render('Sail', True, WHITE)
-    text_rect = text.get_rect(center=sail_button.center)
-    screen.blit(text, text_rect)
 
-    draw_return_button(screen)
 
-# Function to handle drawing and interaction for the market UI
-def market_ui(screen):
-    screen.fill(LIGHT_BLUE)
-    pygame.draw.rect(screen, GREY, buy_button)
-    pygame.draw.rect(screen, GREY, sell_button)
-    # Draw text on the buttons
-    font = pygame.font.Font(None, 36)
-    text_buy = font.render('Buy', True, WHITE)
-    text_sell = font.render('Sell', True, WHITE)
-    screen.blit(text_buy, buy_button.topleft)
-    screen.blit(text_sell, sell_button.topleft)
-
-    draw_return_button(screen)
-
-# Function to handle drawing and interaction for the ship UI
-def ship_ui(screen):
-    screen.fill(LIGHT_BLUE)
-    pygame.draw.rect(screen, GREY, upgrade_button)
-    # Draw text on the button
-    font = pygame.font.Font(None, 36)
-    text_upgrade = font.render('Upgrade Ship', True, WHITE)
-    screen.blit(text_upgrade, upgrade_button.topleft)
-
-    draw_return_button(screen)
-
-# Function to handle drawing and interaction for the save game UI
-def save_game_ui(screen):
-    screen.fill(LIGHT_BLUE)
-    pygame.draw.rect(screen, GREY, save_button)
-    # Draw text on the button
-    font = pygame.font.Font(None, 36)
-    text_save = font.render('Save Game', True, WHITE)
-    screen.blit(text_save, save_button.topleft)
-
-    draw_return_button(screen)
 # Function to draw the sailing canvas
 def sailing_canvas(screen, player_square):
     screen.fill(LIGHT_BLUE)
@@ -285,19 +153,19 @@ while running:
     if game_state == 'front_page':
         start_button_rects = ui.show_front_page(screen)
     elif game_state == 'main_game':
-        port_ui(screen)
+        ui.port_ui(screen)
 
         # port page conversion to sail page -------------------------------
         keys = pygame.key.get_pressed()
         # Draw the interface based on the current page
         if port_page == 'dock':
-            dock_ui(screen)
+            ui.dock_ui(screen)
         elif port_page == 'market':
-            market_ui(screen)
+            ui.market_ui(screen)
         elif port_page == 'ship':
-            ship_ui(screen)
+            ui.ship_ui(screen)
         elif port_page == 'save_game':
-            save_game_ui(screen)
+            ui.save_game_ui(screen)
         elif port_page == 'sailing':
             keys = pygame.key.get_pressed()
             move_player_square(keys, player_square)
