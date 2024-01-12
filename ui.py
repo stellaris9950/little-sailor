@@ -13,7 +13,7 @@ def show_front_page(screen):
     button_font = pygame.font.Font(None, 36)
 
     # Draw the title
-    title_text = title_font.render('Cookie Clicker', True, (0, 0, 0))
+    title_text = title_font.render('Little Sailor', True, (0, 0, 0))
     title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 3))
     screen.blit(title_text, title_rect)
 

@@ -4,9 +4,6 @@ import json
 import ui
 from color import *
 
-
-
-
 # Initialize Pygame
 pygame.init()
 
@@ -16,34 +13,12 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Little Sailor")
 
 # Load cookie image
-cookie_img = pygame.image.load('cookie.png')
-cookie_rect = cookie_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 
 # Game variables
 score = 0
 font = pygame.font.Font(None, 36)
 
 
-
-# Button positions and sizes
-buttons = {
-    "dock": pygame.Rect(50, 500, 80, 80),
-    "market": pygame.Rect(150, 500, 80, 80),
-    "ship": pygame.Rect(250, 500, 80, 80),
-    "save_game": pygame.Rect(350, 500, 80, 80)
-}
-
-
-# Dock UI sail button
-sail_button = pygame.Rect(350, 250, 100, 50)
-# Market UI buttons
-buy_button = pygame.Rect(300, 200, 100, 50)
-sell_button = pygame.Rect(300, 300, 100, 50)
-
-
-return_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
-upgrade_button = pygame.Rect(300, 250, 150, 50)
-save_button = pygame.Rect(300, 250, 150, 50)
 
 # Current page
 
