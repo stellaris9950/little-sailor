@@ -32,6 +32,7 @@ def show_front_page(screen):
     return start_button_rect, load_button_rect
 
 
+# Port page functions -----------------------------------------
 
 port_page = None
 buttons = {
@@ -119,3 +120,27 @@ def save_game_ui(screen):
     screen.blit(text_save, save_button.topleft)
 
     draw_return_button(screen)
+
+
+def check_button_click(pos):
+    global port_page
+    if return_button.collidepoint(pos):
+        port_page = None
+    elif port_page == 'dock':
+        if sail_button.collidepoint(pos):
+            port_page = 'sailing'
+    elif port_page == 'market':
+        if buy_button.collidepoint(pos):
+            print('Buy')
+        elif sell_button.collidepoint(pos):
+            print('Sell')
+    elif port_page == 'ship':
+        if upgrade_button.collidepoint(pos):
+            print('Upgraded your ship')
+    elif port_page == 'save_game':
+        if save_button.collidepoint(pos):
+            print('Saved game')
+    else:
+        for name, rect in buttons.items():
+            if rect.collidepoint(pos):
+                port_page = name

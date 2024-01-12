@@ -46,7 +46,6 @@ upgrade_button = pygame.Rect(300, 250, 150, 50)
 save_button = pygame.Rect(300, 250, 150, 50)
 
 # Current page
-port_page = None
 
 # Player square for sailing
 player_square = pygame.Rect(WIDTH // 2, HEIGHT // 2, 50, 50)
@@ -66,12 +65,6 @@ def load_game():
     except FileNotFoundError:
         return 0
 
-# Port page functions -----------------------------------------
-
-
-
-
-
 
 # Function to draw the sailing canvas
 def sailing_canvas(screen, player_square):
@@ -79,28 +72,7 @@ def sailing_canvas(screen, player_square):
     pygame.draw.rect(screen, GREY, player_square)  # Player square
 
 # Function to check button clicks and call appropriate functions
-def check_button_click(pos):
-    global port_page
-    if return_button.collidepoint(pos):
-        port_page = None
-    elif port_page == 'dock':
-        if sail_button.collidepoint(pos):
-            port_page = 'sailing'
-    elif port_page == 'market':
-        if buy_button.collidepoint(pos):
-            print('Buy')
-        elif sell_button.collidepoint(pos):
-            print('Sell')
-    elif port_page == 'ship':
-        if upgrade_button.collidepoint(pos):
-            print('Upgraded your ship')
-    elif port_page == 'save_game':
-        if save_button.collidepoint(pos):
-            print('Saved game')
-    else:
-        for name, rect in buttons.items():
-            if rect.collidepoint(pos):
-                port_page = name
+
 
 def move_player_square(keys, player_square):
     if keys[pygame.K_w]:
@@ -140,7 +112,7 @@ while running:
 
             # when the game is at the port page --------------------------
             elif game_state == 'main_game':
-                check_button_click(event.pos)
+                ui.check_button_click(event.pos)
 
                 # if cookie_rect.collidepoint(event.pos):
                 #     score += 1
@@ -158,15 +130,15 @@ while running:
         # port page conversion to sail page -------------------------------
         keys = pygame.key.get_pressed()
         # Draw the interface based on the current page
-        if port_page == 'dock':
+        if ui.port_page == 'dock':
             ui.dock_ui(screen)
-        elif port_page == 'market':
+        elif ui.port_page == 'market':
             ui.market_ui(screen)
-        elif port_page == 'ship':
+        elif ui.port_page == 'ship':
             ui.ship_ui(screen)
-        elif port_page == 'save_game':
+        elif ui.port_page == 'save_game':
             ui.save_game_ui(screen)
-        elif port_page == 'sailing':
+        elif ui.port_page == 'sailing':
             keys = pygame.key.get_pressed()
             move_player_square(keys, player_square)
             sailing_canvas(screen, player_square)
