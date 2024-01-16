@@ -43,3 +43,16 @@ def read_ui(filename="ui-element-list.json"):
     except (FileNotFoundError, json.JSONDecodeError):
         # Return an empty list if the file doesn't exist or is empty/invalid
         return []
+
+
+# Save and load functions
+def save_game(score):
+    with open('savegame.json', 'w') as file:
+        json.dump({'score': score}, file)
+def load_game():
+    try:
+        with open('savegame.json', 'r') as file:
+            data = json.load(file)
+            return data['score']
+    except FileNotFoundError:
+        return 0

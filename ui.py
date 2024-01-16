@@ -1,5 +1,8 @@
 import pygame
+
+import game_value
 from color import *
+from game_value import *
 
 WIDTH, HEIGHT = 800, 600
 
@@ -45,10 +48,17 @@ def port_ui(screen):
     screen.fill(LIGHT_BLUE)
     pygame.draw.rect(screen, DARK_BLUE, (0, 0, WIDTH, 50))
 
+    font = pygame.font.Font(None, 36)
+
     if not port_page:
         pygame.draw.rect(screen, GREY, (50, 100, 700, 200))
         for name, rect in buttons.items():
             pygame.draw.rect(screen, BROWN, rect)
+
+            text = font.render(name, True, WHITE)
+            text_rect = text.get_rect(center=rect.center)
+            screen.blit(text, text_rect)
+
 
 # Return button position and size
 return_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
@@ -131,12 +141,12 @@ def check_button_click(pos):
             port_page = 'sailing'
     elif port_page == 'market':
         if buy_button.collidepoint(pos):
-            print('Buy')
+            game_value.buyOrSell('buy')
         elif sell_button.collidepoint(pos):
-            print('Sell')
+            game_value.buyOrSell('sell')
     elif port_page == 'ship':
         if upgrade_button.collidepoint(pos):
-            print('Upgraded your ship')
+            game_value.upgradeShip()
     elif port_page == 'save_game':
         if save_button.collidepoint(pos):
             print('Saved game')
