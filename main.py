@@ -107,6 +107,23 @@ def get_direction_to_mouse(player_rect, mouse_pos):
 
     return pygame.Vector2(x_dir, y_dir)
 
+port = pygame.image.load('Pictures/port.png').convert_alpha()
+ports_rect = {
+    'topleft': port.get_rect(center=(200,100)),
+    'topright': port.get_rect(center=(200,1000)),
+    'bottomleft': port.get_rect(center=(1200, 100)),
+    'bottomright': port.get_rect(center=(1200, 1000)),
+    'middle': port.get_rect(center=(800, 600))
+}
+
+def drawPort(surface):
+    global port, ports_rect
+    surface.blit(port, ports_rect['topleft'])
+    surface.blit(port, ports_rect['topright'])
+    surface.blit(port, ports_rect['bottomleft'])
+    surface.blit(port, ports_rect['bottomright'])
+    surface.blit(port, ports_rect['middle'])
+
 
 # Game variables
 gold = 0
@@ -191,8 +208,11 @@ while running:
         screen.fill(BLACK)
         screen.blit(background, -offset)  # Draw the background with the offset
 
+        drawPort(background)
+
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft - offset)  # Draw sprites with the offset
+
 
     renderGold(game_value.gold)
 
