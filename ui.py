@@ -149,7 +149,7 @@ def check_button_click(pos):
             game_value.upgradeShip()
     elif port_page == 'save_game':
         if save_button.collidepoint(pos):
-            print('Saved game')
+            game_value.saveGame()
     else:
         for name, rect in buttons.items():
             if rect.collidepoint(pos):

@@ -2,10 +2,8 @@ import pygame
 import json
 
 import game_value
-import jsonProcess
 import ui
 from color import *
-from game_value import *
 
 # Initialize Pygame
 pygame.init()
@@ -108,6 +106,7 @@ def get_direction_to_mouse(player_rect, mouse_pos):
     return pygame.Vector2(x_dir, y_dir)
 
 port = pygame.image.load('Pictures/port.png').convert_alpha()
+ports_index = ['topleft', 'topright', 'bottomleft', 'bottomright', 'middle']
 ports_rect = {
     'topleft': port.get_rect(center=(200,100)),
     'topright': port.get_rect(center=(200,1000)),
@@ -156,7 +155,7 @@ while running:
                 if ui.buttonClickDetect(start_button_rect):
                     game_state = 'port_page'
                 elif ui.buttonClickDetect(load_button_rect):
-                    score = jsonProcess.load_game()
+                    game_value.loadGame()
 
             # when the game is at the port page --------------------------
             elif game_state == 'port_page':
@@ -189,6 +188,7 @@ while running:
         start_button_rects = ui.show_front_page(screen)
     elif game_state == 'port_page':
         ui.port_ui(screen)
+        renderGold(game_value.gold)
 
         # port page conversion to sail page -------------------------------
         keys = pygame.key.get_pressed()
@@ -209,12 +209,15 @@ while running:
         screen.blit(background, -offset)  # Draw the background with the offset
 
         drawPort(background)
-
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft - offset)  # Draw sprites with the offset
 
+        for index in ports_index:
+            if ports_rect[index].collidepoint(player.rect.topleft):
+                game_state = 'port_page'
+            break
 
-    renderGold(game_value.gold)
+
 
     pygame.display.flip()
     pygame.time.Clock().tick(60)
