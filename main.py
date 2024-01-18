@@ -161,10 +161,6 @@ while running:
             elif game_state == 'port_page':
                 ui.check_button_click(event.pos)
 
-                # if cookie_rect.collidepoint(event.pos):
-                #     score += 1
-                # elif save_button_rect.collidepoint(event.pos):
-                #     save_game(score)
             elif game_state == 'sail_page':
                 mouse_pos = pygame.mouse.get_pos()
                 adjusted_mouse_pos = (mouse_pos[0] + offset.x, mouse_pos[1] + offset.y)
@@ -176,7 +172,7 @@ while running:
                         direction_vector = direction_vector.normalize()
                         # print(direction_vector)
                         player.set_direction(direction_vector * PLAYER_SPEED)
-
+                break
     # __________________________________________________________________
 
     all_sprites.update()
@@ -190,9 +186,7 @@ while running:
         ui.port_ui(screen)
         renderGold(game_value.gold)
 
-        # port page conversion to sail page -------------------------------
-        keys = pygame.key.get_pressed()
-        # Draw the interface based on the current page
+       # Draw the interface based on the current page
         if ui.port_page == 'dock':
             ui.dock_ui(screen)
         elif ui.port_page == 'market':
@@ -214,8 +208,10 @@ while running:
 
         for index in ports_index:
             if ports_rect[index].collidepoint(player.rect.topleft):
+                print('change')
                 game_state = 'port_page'
-            break
+                ui.port_ui(screen)
+                break
 
 
 
